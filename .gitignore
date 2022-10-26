@@ -1,5 +1,5 @@
 node_modules/
-dist/
+# dist/
 .env
 cred.json/
 README.md
