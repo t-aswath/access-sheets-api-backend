@@ -11,8 +11,8 @@ import {
   NotImplementedException,
 } from "@nestjs/common";
 import { sheets_v4 } from "googleapis";
-import { format } from "src/functions/format";
-import { format_range } from "src/functions/format-range";
+import { format } from "../functions/format";
+import { format_range } from "../functions/format-range";
 import { SheetService } from "./sheet.service";
 
 @Controller("sheet")
