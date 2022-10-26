@@ -4,14 +4,14 @@ export const format = (
   type: "LIST" | "KEY_VALUE" | "KEY_PAIR",
   limit: number
 ) => {
-  const lim = limit != undefined ? limit : data.length;
-  console.log(lim);
+  const lim = limit != undefined ? limit : data.length - 1;
   switch (type) {
     case "KEY_VALUE":
       const keys = data[0];
       return data.slice(1).map((i) => {
         return parse(i, keys);
       });
+
     case "LIST":
       return data;
     case "KEY_PAIR":
@@ -26,6 +26,6 @@ export const format = (
       }
       return pair;
     default:
-      return data.values;
+      return data;
   }
 };

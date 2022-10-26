@@ -33,6 +33,7 @@ export class SheetController {
       sheet: sheets_v4.Sheets;
     }
   ) {
+    console.log(query);
     const { range } = query.data;
     if (query.data.range === undefined || !range.length) {
       throw new BadRequestException("MISSING RANGE");
