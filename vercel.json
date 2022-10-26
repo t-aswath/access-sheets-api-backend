@@ -13,8 +13,10 @@
       "dest": "src/main.ts",
       "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
       "headers": {
-        "key": "Access-Control-Allow-Headers",
-        "value": "Origin, X-Requested-With, Content-Type, Accept, Authorization, X-CSRF-Token"
+        "access-control-allow-headers": "origin, x-requested-with, content-type, accept, authorization, x-csrf-token",
+        "Access-Control-Allow-Methods": "GET, POST, DELETE, PUT, PATCH, OPTIONS",
+        "Access-Control-Allow-Headers": "content-type",
+        "Access-Control-Allow-Origin": "*"
       }
     }
   ]
