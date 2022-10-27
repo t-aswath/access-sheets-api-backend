@@ -9,6 +9,7 @@ import {
   NotFoundException,
   ConflictException,
   NotImplementedException,
+  HttpException,
 } from "@nestjs/common";
 import { sheets_v4 } from "googleapis";
 import { format } from "../functions/format";
@@ -24,7 +25,7 @@ export class SheetController {
     @Query()
     query: {
       id: string;
-      type: "LIST" | "KEY_VALUE";
+      type: "LIST" | "KEY_VALUE" | "KEY_PAIR";
       limit: number;
       data: { range: [string?, string?, string?] };
     },
@@ -56,10 +57,32 @@ export class SheetController {
 
   @Post()
   async postData(
-    @Body() body: { sheet: sheets_v4.Sheets; data: any[] },
+    @Body()
+    body: {
+      sheet: sheets_v4.Sheets;
+      data: any[];
+      props: {
+        bgrgb: [number, number, number];
+        fgrgb: [number, number, number];
+        font: string;
+      };
+    },
     @Query() query: { id: string }
   ) {
     const sheets = body.sheet;
+    const [bg_red, bg_green, bg_blue] =
+      body.props != undefined && body.props.bgrgb != undefined
+        ? body.props.bgrgb
+        : [1, 1, 1];
+    const [fg_red, fg_green, fg_blue] =
+      body.props != undefined && body.props.fgrgb != undefined
+        ? body.props.fgrgb
+        : [0, 0, 0];
+
+    const font =
+      body.props != undefined && body.props.font != undefined
+        ? body.props.font
+        : "Arial";
     const input =
       typeof body.data === "string" ? JSON.parse(body.data) : body.data;
 
@@ -100,17 +123,52 @@ export class SheetController {
         );
       }
       try {
-        const { data } = await sheets.spreadsheets.values.append({
+        const cellData = inputData.map((i) => {
+          return {
+            values: i.map((value, _index) => {
+              return {
+                userEnteredValue: { stringValue: value },
+                userEnteredFormat: {
+                  backgroundColor: {
+                    red: bg_red,
+                    green: bg_green,
+                    blue: bg_blue,
+                  },
+                  textFormat: {
+                    fontFamily: font,
+                    foregroundColor: {
+                      red: fg_red,
+                      blue: fg_blue,
+                      green: fg_green,
+                    },
+                  },
+                },
+              };
+            }),
+          };
+        });
+        const { data } = await sheets.spreadsheets.batchUpdate({
           spreadsheetId: query.id,
-          range: "Sheet1",
-          valueInputOption: "USER_ENTERED",
           requestBody: {
-            values: inputData,
+            requests: [
+              {
+                appendCells: {
+                  fields: "*",
+                  rows: cellData,
+                },
+              },
+            ],
           },
-          includeValuesInResponse: true,
+          // range: "Sheet1",
+          // valueInputOption: "USER_ENTERED",
+          // requestBody: {
+          //   values: inputData,
+          // },
+
+          // includeValuesInResponse: true,
         });
 
-        return data.updates;
+        return data.replies;
       } catch (e) {
         throw new NotFoundException("SPREADSHEET / SHEET NOT FOUND");
       }
@@ -137,7 +195,7 @@ export class SheetController {
     try {
       const res = await sheets.spreadsheets.values.get({
         spreadsheetId: query.id,
-        range: "Sheet1",
+        range: body.data.range[0],
       });
       if (res.data.values[0].length === 0) {
         throw new ConflictException("ADD COLUMS TO UPDATE DATA");
@@ -156,12 +214,8 @@ export class SheetController {
               break;
             }
           }
-          if (!append) {
-            inputData[i].push("");
-          }
         }
       }
-
       if (!isColumn) {
         throw new ConflictException(
           "ENTER THE CORRECT COLUM NAMES TO UPDATE DATA"
@@ -171,7 +225,7 @@ export class SheetController {
         const res = await sheets.spreadsheets.values.update({
           spreadsheetId: query.id,
           includeValuesInResponse: true,
-          range: `${data.range[0]}!${data.range[1]}:${data.range[2]}`,
+          range: format_range(body.data.range),
           valueInputOption: "RAW",
           requestBody: {
             values: inputData,
@@ -179,15 +233,15 @@ export class SheetController {
         });
         return res.data.updatedData;
       } catch (e) {
-        if (e.response.data.error.code === 400) {
-          throw new BadRequestException(
-            "ENTER IN THE FOLLOWING FORMAT -> ['{sheetName}' , '{cellFrom}' , '{cellTo}'] (or) ENTER VALID ( RANGE / SHEET NAME )"
-          );
-        }
-        throw new NotFoundException("SPREADSHEET / SHEET NOT FOUND");
+        const { message, code } = e.response.data.error;
+        return new HttpException(message, code);
       }
     } catch (e) {
-      throw new NotFoundException("SPREADSHEET / SHEET NOT FOUND");
+      if (e.response.data != undefined && e.response.data.error.code === 404) {
+        const error = e.response.data.error;
+        throw new HttpException(error.message, error.code);
+      }
+      throw new HttpException(e.response.message, e.response.statusCode);
     }
   }
 }
