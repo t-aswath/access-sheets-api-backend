@@ -84,7 +84,7 @@ export class SpreadsheetController {
       });
       return data;
     } catch (e) {
-      throw new HttpException(e, 400);
+      return new HttpException(e, 400);
     }
   }
 }
