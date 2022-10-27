@@ -234,7 +234,7 @@ export class SheetController {
         return res.data.updatedData;
       } catch (e) {
         const { message, code } = e.response.data.error;
-        return new HttpException(message, code);
+        throw new HttpException(message, code);
       }
     } catch (e) {
       if (e.response.data != undefined && e.response.data.error.code === 404) {
