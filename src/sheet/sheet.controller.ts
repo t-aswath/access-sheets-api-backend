@@ -34,7 +34,6 @@ export class SheetController {
       sheet: sheets_v4.Sheets;
     }
   ) {
-    console.log(query);
     const { range } = query.data;
     if (query.data.range === undefined || !range.length) {
       throw new BadRequestException("MISSING RANGE");
@@ -134,6 +133,8 @@ export class SheetController {
                     green: bg_green,
                     blue: bg_blue,
                   },
+                  verticalAlignment: "MIDDLE",
+                  horizontalAlignment: "CENTER",
                   textFormat: {
                     fontFamily: font,
                     foregroundColor: {
@@ -159,15 +160,8 @@ export class SheetController {
               },
             ],
           },
-          // range: "Sheet1",
-          // valueInputOption: "USER_ENTERED",
-          // requestBody: {
-          //   values: inputData,
-          // },
-
-          // includeValuesInResponse: true,
         });
-
+        console.log(data, cellData);
         return data.replies;
       } catch (e) {
         throw new NotFoundException("SPREADSHEET / SHEET NOT FOUND");
