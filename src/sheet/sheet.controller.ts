@@ -61,7 +61,7 @@ export class SheetController {
       sheet: sheets_v4.Sheets;
       data: any[];
       props: {
-        bgrgb: [number, number, number];
+        bgrgb: [number, number, number, number];
         fgrgb: [number, number, number];
         font: string;
       };
@@ -129,9 +129,10 @@ export class SheetController {
                 userEnteredValue: { stringValue: value },
                 userEnteredFormat: {
                   backgroundColor: {
-                    red: bg_red,
-                    green: bg_green,
-                    blue: bg_blue,
+                    red: bg_red / 255,
+                    green: bg_green / 255,
+                    blue: bg_blue / 255,
+                    alpha: 0.2,
                   },
                   verticalAlignment: "MIDDLE",
                   horizontalAlignment: "CENTER",
@@ -161,8 +162,7 @@ export class SheetController {
             ],
           },
         });
-        console.log(data, cellData);
-        return data.replies;
+        return data;
       } catch (e) {
         throw new NotFoundException("SPREADSHEET / SHEET NOT FOUND");
       }
