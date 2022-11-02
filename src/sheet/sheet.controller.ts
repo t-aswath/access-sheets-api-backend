@@ -128,19 +128,23 @@ export class SheetController {
               return {
                 userEnteredValue: { stringValue: value },
                 userEnteredFormat: {
-                  backgroundColor: {
-                    red: bg_red,
-                    green: bg_green,
-                    blue: bg_blue,
+                  backgroundColorStyle: {
+                    rgbColor: {
+                      red: bg_red,
+                      green: bg_green,
+                      blue: bg_blue,
+                    },
                   },
                   verticalAlignment: "MIDDLE",
                   horizontalAlignment: "CENTER",
                   textFormat: {
                     fontFamily: font,
-                    foregroundColor: {
-                      red: fg_red,
-                      blue: fg_blue,
-                      green: fg_green,
+                    foregroundColorStyle: {
+                      rgbColor: {
+                        red: fg_red,
+                        blue: fg_blue,
+                        green: fg_green,
+                      },
                     },
                   },
                 },
