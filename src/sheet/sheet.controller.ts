@@ -129,9 +129,9 @@ export class SheetController {
                 userEnteredValue: { stringValue: value },
                 userEnteredFormat: {
                   backgroundColor: {
-                    red: 255 - bg_red / 255,
-                    green: 255 - bg_green / 255,
-                    blue: 255 - bg_blue / 255,
+                    red: bg_red,
+                    green: bg_green,
+                    blue: bg_blue,
                   },
                   verticalAlignment: "MIDDLE",
                   horizontalAlignment: "CENTER",
