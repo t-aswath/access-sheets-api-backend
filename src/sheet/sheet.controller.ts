@@ -130,9 +130,9 @@ export class SheetController {
                 userEnteredFormat: {
                   backgroundColorStyle: {
                     rgbColor: {
-                      red: bg_red,
-                      green: bg_green,
-                      blue: bg_blue,
+                      red: bg_red / 255,
+                      green: bg_green / 255,
+                      blue: bg_blue / 255,
                     },
                   },
                   verticalAlignment: "MIDDLE",
