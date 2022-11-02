@@ -71,11 +71,11 @@ export class SheetController {
     const sheets = body.sheet;
     const [bg_red, bg_green, bg_blue] =
       body.props != undefined || body.props.bgrgb != undefined
-        ? body.props.bgrgb
+        ? body.props.bgrgb.map((i) => 255 / i - 255)
         : [1, 1, 1];
     const [fg_red, fg_green, fg_blue] =
       body.props != undefined || body.props.fgrgb != undefined
-        ? body.props.fgrgb
+        ? body.props.fgrgb.map((i) => 255 / i - 255)
         : [0, 0, 0];
 
     const font =
