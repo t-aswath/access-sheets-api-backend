@@ -70,16 +70,16 @@ export class SheetController {
   ) {
     const sheets = body.sheet;
     const [bg_red, bg_green, bg_blue] =
-      body.props != undefined && body.props.bgrgb != undefined
+      body.props != undefined || body.props.bgrgb != undefined
         ? body.props.bgrgb
         : [1, 1, 1];
     const [fg_red, fg_green, fg_blue] =
-      body.props != undefined && body.props.fgrgb != undefined
+      body.props != undefined || body.props.fgrgb != undefined
         ? body.props.fgrgb
         : [0, 0, 0];
 
     const font =
-      body.props != undefined && body.props.font != undefined
+      body.props != undefined || body.props.font != undefined
         ? body.props.font
         : "Arial";
     const input =
@@ -129,9 +129,9 @@ export class SheetController {
                 userEnteredValue: { stringValue: value },
                 userEnteredFormat: {
                   backgroundColor: {
-                    red: bg_red / 255,
-                    green: bg_green / 255,
-                    blue: bg_blue / 255,
+                    red: bg_red,
+                    green: bg_green,
+                    blue: bg_blue,
                     alpha: 0.2,
                   },
                   verticalAlignment: "MIDDLE",
