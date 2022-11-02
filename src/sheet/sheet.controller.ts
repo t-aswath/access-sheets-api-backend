@@ -72,7 +72,7 @@ export class SheetController {
     const [bg_red, bg_green, bg_blue] =
       body.props != undefined && body.props.bgrgb != undefined
         ? body.props.bgrgb
-        : [1, 1, 1];
+        : [255, 255, 255];
     const [fg_red, fg_green, fg_blue] =
       body.props != undefined && body.props.fgrgb != undefined
         ? body.props.fgrgb
@@ -141,9 +141,9 @@ export class SheetController {
                     fontFamily: font,
                     foregroundColorStyle: {
                       rgbColor: {
-                        red: fg_red,
-                        blue: fg_blue,
-                        green: fg_green,
+                        red: fg_red / 255,
+                        blue: fg_blue / 255,
+                        green: fg_green / 255,
                       },
                     },
                   },
