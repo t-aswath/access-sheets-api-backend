@@ -66,7 +66,7 @@ export class SheetController {
         font: string;
       };
     },
-    @Query() query: { id: string }
+    @Query() query: { id: string; sheetId: number; sheetName: string }
   ) {
     const sheets = body.sheet;
     const [bg_red, bg_green, bg_blue] =
@@ -91,7 +91,7 @@ export class SheetController {
     try {
       const { data } = await sheets.spreadsheets.values.get({
         spreadsheetId: query.id,
-        range: "Sheet1",
+        range: query.sheetName,
       });
       if (data.values[0].length === 0) {
         throw new ConflictException("ADD COLUMS TO UPDATE DATA");
@@ -158,6 +158,7 @@ export class SheetController {
             requests: [
               {
                 appendCells: {
+                  sheetId: query.sheetId,
                   fields: "*",
                   rows: cellData,
                 },
@@ -167,9 +168,11 @@ export class SheetController {
         });
         return data;
       } catch (e) {
+        console.log(e);
         throw new NotFoundException("SPREADSHEET / SHEET NOT FOUND");
       }
     } catch (e) {
+      console.log(e);
       throw new NotFoundException("SPREADSHEET / SHEET NOT FOUND");
     }
   }
