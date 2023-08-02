@@ -10,11 +10,11 @@
 
 ### Table of Contents
 
-  - [Introduction](#Introduction)
-  - [Features](#Features)
-  - [How it Works](#How-it-Works)
-  - [Examples](#Examples)
-  - [Contributing](#Contributing)
+  - [Introduction](#introduction)
+  - [Features](#features)
+  - [How it Works](#how-it-works)
+  - [Examples](#examples)
+  - [Contributing](#contributing)
 
 # Introduction
 Access-Sheets-API-Backend offers a convenient way to access and manipulate data in Google Spreadsheets without the need for complex database setups or direct access to Google Sheets' internal API. By using this project, you can utilize the familiar structure of Google Sheets for your data storage needs, allowing you to easily organize, share, and collaborate on data with your team.
